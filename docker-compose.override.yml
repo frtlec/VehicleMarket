@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  advertdb:
+    container_name: advertdb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - advertdb_volume:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=Password12*
+      - POSTGRES_DB=advertdb
+  # advert.api:
+  #   container_name: advert.api
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - "ConnectionStrings:PostgreSql=User ID=admin; Password=Password12*; Server=advertdb; Port=5432;Database=advertdb;Integrated Security=true;Pooling=true"
+  #   ports:
+  #     - "7233:80"
+  #   depends_on:
+  #     - advertdb

@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  advertdb:
+    image: postgres
+  # advert.api:
+  #   image: advert_api_image
+  #   build:
+  #     context: .
+  #     dockerfile: Services/Advert/VehicleMarket.Services.Advert.API/Dockerfile
+volumes:
+  advertdb_volume:

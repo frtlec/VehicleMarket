@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\" />
+    <Folder Include="Handlers\" />
+    <Folder Include="Dtos\" />
+    <Folder Include="Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\VehicleMarket.Shared\VehicleMarket.Shared.csproj" />
+    <ProjectReference Include="..\VehicleMarket.Services.Advert.Infrastructure\VehicleMarket.Services.Advert.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
