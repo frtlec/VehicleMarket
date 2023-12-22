@@ -67,7 +67,7 @@ We can start partying when the Docker containers are up and running.
 
 ## Connect
   - [Advert Api (:7100)](http://localhost:7100/swagger/index.html)
-  - [Rabbitmq (:15673)](http://localhost:15673/)
+  - [Rabbitmq (:15673)](http://localhost:15673/) guest:guest
 
 
 ## Connect Postgre SQL
