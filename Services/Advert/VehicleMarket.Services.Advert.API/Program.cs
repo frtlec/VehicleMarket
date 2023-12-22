@@ -21,10 +21,9 @@ builder.Services.AddControllers().AddJsonOptions(f=> {
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddTransient<IDbConnection>(_=>new NpgsqlConnection(builder.Configuration.GetConnectionString("AdvertPostgreDB")));
-builder.Services.AddTransient<IAdvertRepository,AdvertRepository>();
-builder.Services.AddTransient<IAdvertVisitsRepository, AdvertVisitsRepository>();
-builder.Services.AddMassTransitHostedService();
+builder.Services.AddScoped<IDbConnection>(_=>new NpgsqlConnection(builder.Configuration.GetConnectionString("AdvertPostgreDB")));
+builder.Services.AddScoped<IAdvertRepository,AdvertRepository>();
+builder.Services.AddScoped<IAdvertVisitsRepository, AdvertVisitsRepository>();
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<AdvertVisitEventConsumer>();

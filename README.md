@@ -58,11 +58,22 @@ Run Docker containers
 We can start partying when the Docker containers are up and running.
 
 - If everything has gone smoothly so far, you should be able to reach the 'advert.api' from the link below
-- ADVERT-API DEFAULT PORT 7100
-  [ADVERT API](http://localhost:7100/swagger/index.html)
+
+## Connect
+  - [Advert Api (:7100)](http://localhost:7100/swagger/index.html)
+  - [Rabbitmq (:15673)](http://localhost:15673/)
 
 
-## Notes
+## Connect Postgre SQL
+- HOST=localhost:5432
+- DB=advertdb
+- USERID=admin
+- PASS=Password12*
+- "ConnectionStrings:PostgreSql=User ID=admin; Password=Password12*; Server=advertdb; Port=5432;Database=advertdb;Integrated Security=true;Pooling=true"
+  
+
+
+## Notes !
 - The initial data and tables of the project come from the init.sql file.
 - init.sql is called in the docker-compose.override.yml file. (look ./docker-compose.override.yml)
 

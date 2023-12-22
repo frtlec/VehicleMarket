@@ -5,8 +5,6 @@ VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{7349E4A1-BFCB-4F51-99EE-54F9AC12843E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServer", "IdentityServer", "{C4D0F884-8293-40B7-846D-795CB11AE464}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Advert", "Advert", "{AA3A1072-1920-41D0-B156-E31E0C1FC653}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleMarket.Services.Advert.API", "Services\Advert\VehicleMarket.Services.Advert.API\VehicleMarket.Services.Advert.API.csproj", "{8BC78224-3077-44B8-9C8B-2963D3958882}"
