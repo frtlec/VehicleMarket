@@ -11,7 +11,7 @@ namespace VehicleMarket.Services.Advert.Domain.SeedWork.Repository
 {
     public interface IAdvertRepository:IRepository<AdvertModel>
     {
-        Task<List<AdvertModel>> GetAllByFilter(AdvertGetAllByFilterInput filter);
-        Task BulkInsert(List<AdvertModel> items);
+        Task<(List<AdvertModel> Items, int Total)> GetAllByFilter(AdvertGetAllByFilterInput filter);
+        Task<AdvertModel> GetById(int id);
     }
 }

@@ -14,6 +14,10 @@ namespace VehicleMarket.Services.Advert.Domain.AggregateModels.AdvertModels
         public int Id { get; private set; }
         public string Name { get; private set; }
 
+        public CategoryModel()
+        {
+                
+        }
         public CategoryModel(int categoryId, string categoryName)
         {
             Id = categoryId;

@@ -6,17 +6,29 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - advertdb_volume:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data/Adverts.csv:/Adverts.csv
+      - ./data/AdvertVisits.csv:/AdvertVisits.csv
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=Password12*
       - POSTGRES_DB=advertdb
-  # advert.api:
-  #   container_name: advert.api
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - "ConnectionStrings:PostgreSql=User ID=admin; Password=Password12*; Server=advertdb; Port=5432;Database=advertdb;Integrated Security=true;Pooling=true"
-  #   ports:
-  #     - "7233:80"
-  #   depends_on:
-  #     - advertdb
+  advert.api:
+    container_name: advert.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:PostgreSql=User ID=admin; Password=Password12*; Server=advertdb; Port=5432;Database=advertdb;Integrated Security=true;Pooling=true"
+      - RabbitMQUrl=rabbitmq
+    ports:
+      - "7100:80"
+    depends_on:
+      - advertdb
+  vehiclemarket_rabbitmq:
+    container_name: vehiclemarket_rabbitmq
+    restart: always
+    ports:
+      - "15673:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest

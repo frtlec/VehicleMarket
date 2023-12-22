@@ -2,10 +2,12 @@ version: "3.8"
 services:
   advertdb:
     image: postgres
-  # advert.api:
-  #   image: advert_api_image
-  #   build:
-  #     context: .
-  #     dockerfile: Services/Advert/VehicleMarket.Services.Advert.API/Dockerfile
+  advert.api:
+    image: advert_api_image
+    build:
+      context: .
+      dockerfile: Services/Advert/VehicleMarket.Services.Advert.API/Dockerfile
+  vehiclemarket_rabbitmq:
+    image: rabbitmq:3.12.10-management
 volumes:
   advertdb_volume:

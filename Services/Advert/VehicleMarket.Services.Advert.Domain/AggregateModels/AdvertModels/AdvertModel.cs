@@ -38,7 +38,10 @@ namespace VehicleMarket.Services.Advert.Domain.AggregateModels.AdvertModels
         public int ModelId { get; private set; }
         public string ModelName { get; private set; }
         public Model Model { get; private set; }
-
+        public AdvertModel()
+        {
+                
+        }
         public AdvertModel(int memberId,int year, decimal price, string title, DateTime date, double kM, string color, string gear, string fuel, string firstPhoto, string secondPhoto, string userInfo, string userPhone, string text, CategoryModel category, TownModel town, Model model, City city)
         {
             MemberId=memberId;
@@ -67,5 +70,22 @@ namespace VehicleMarket.Services.Advert.Domain.AggregateModels.AdvertModels
             CityId = city.Id;
             CityName = city.Name;   
         }
+        public void SetCategory(int id,string name)
+        {
+            this.Category=new CategoryModel(id,name);  
+            this.CategoryName=name;
+        }
+        public void SetTown(int id, string name)
+        {
+            this.Town = new TownModel(id, name);
+            this.TownName = name;
+
+        }
+        public void SetModel(int id, string name)
+        {
+            this.Model = new Model(id, name);
+            this.ModelName = name;
+        }
+
     }
 }

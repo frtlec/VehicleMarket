@@ -1,7 +1,9 @@
 ﻿using Dapper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,64 +15,95 @@ using VehicleMarket.Services.Advert.Infrastructure.ORM.Dapper.Constants;
 
 namespace VehicleMarket.Services.Advert.Infrastructure.ORM.Dapper
 {
-    public class AdvertRepository : DapperBaseRepository<AdvertModel>,IAdvertRepository
+    public class AdvertRepository : DapperBaseRepository<AdvertModel>, IAdvertRepository
     {
         private readonly IDbConnection _connection;
-        private const string TableName = TableNames.Adverts;
+        private const string TableName = TableNames.Advert;
 
-        public AdvertRepository(IDbConnection connection):base(connection,TableName) 
+        public AdvertRepository(IDbConnection connection) : base(connection, TableName)
         {
             _connection = connection;
         }
-        public async Task<List<AdvertModel>> GetAllByFilter(AdvertGetAllByFilterInput filter)
+        public async Task<(List<AdvertModel> Items, int Total)> GetAllByFilter(AdvertGetAllByFilterInput filter)
         {
             _connection.Open();
 
-            string queryRaw = $"SELECT * FROM {TableName} WHERE 1=1";
-
-            if (string.IsNullOrEmpty(filter.Gear)==false)
-                queryRaw += "and Gear=@Gear ";
+            string queryRaw = $"SELECT {TableName}.*," +
+                    $"{TableNames.AdvertCategories}.id as catid,{TableNames.AdvertCategories}.name, " +
+                    $"{TableNames.VehicleModels}.id as modelid,{TableNames.VehicleModels}.name " +
+                $"FROM {TableName}  " +
+                     $"inner join {TableNames.AdvertCategories} on {TableName}.CategoryId={TableNames.AdvertCategories}.Id " +
+                     $"inner join {TableNames.VehicleModels} on {TableName}.ModelId={TableNames.VehicleModels}.Id " +
+                     $"WHERE 1=1 ";
+            string countQueryRaw = $"SELECT COUNT(id) FROM {TableName} WHERE 1=1 ";
+            string condition = string.Empty;
+            if (string.IsNullOrEmpty(filter.Gear) == false)
+                condition += "and Gear=@Gear ";
             if (string.IsNullOrEmpty(filter.Fuel) == false)
-                queryRaw += "and Fuel=@Fuel ";
-            if (filter.Price.HasValue)
-                queryRaw += "and Price=@Price";
+                condition += "and Fuel=@Fuel ";
+            if (filter.BeginPrice.HasValue)
+                condition += "and Price>=@BeginPrice ";
+            if (filter.EndPrice.HasValue)
+                condition += "and Price<=@EndPrice ";
             if (filter.CategoryId.HasValue)
-                queryRaw += "and CategoryId=@CategoryId";
+                condition += "and CategoryId=@CategoryId ";
 
-            queryRaw += SortingQueryRaw(filter.Sort);
-            queryRaw += GetPaginitionQueryRaw(filter.Page);
+            queryRaw += condition;
+            countQueryRaw += condition;
+            int countResult = await _connection.QueryFirstAsync<int>(countQueryRaw, new { filter.CategoryId, filter.BeginPrice, filter.EndPrice, filter.Gear, filter.Fuel });
 
-            var result = await _connection.QueryAsync<AdvertModel>(queryRaw, new { filter.CategoryId, filter.Price, filter.Gear, filter.Fuel});
+            if (filter.Sort != null)
+            {
+                queryRaw += "ORDER BY" + string.Join(',', filter.Sort.Select(f => $"{f.ColumnName} {f.Directive}").ToArray());
+            }
+            else
+            {
+                queryRaw += $"ORDER BY {TableName}.id desc ";
+            }
+
+            queryRaw += filter.Take.HasValue == false ? string.Empty : $"OFFSET {filter.Skip} ROWS FETCH NEXT {filter.Take} ROWS ONLY ";
+
+            var adverts = await _connection.QueryAsync<AdvertModel, CategoryModel,Model, AdvertModel>(queryRaw, (advert, category,model) =>
+            {
+                advert.SetCategory(category.Id, category.Name);
+                advert.SetModel(model.Id, model.Name);
+                return advert;
+            }, splitOn: $"catid,modelid", param: new { filter.CategoryId, filter.BeginPrice, filter.EndPrice, filter.Gear, filter.Fuel });
+
 
             _connection.Close();
-            return result.ToList();
+            return (adverts.ToList(), countResult);
         }
 
-
-        private string SortingQueryRaw(List<(string ColumnName, SortDirective Directive)> columns)
-        {
-            return "ORDER BY" + string.Join(',', columns.Select(f => $"{f.ColumnName} {f.Directive}").ToArray());
-        }
-        private string GetPaginitionQueryRaw(int? page)
-        {
-            int _page = page.HasValue ? page.Value : 0;
-            int pageSize = 10;
-
-            int skip = pageSize * _page;
-            int take = pageSize;
-            return $"OFFSET {skip} ROWS FETCH NEXT {take} ROWS ONLY";
-        }
-
-        public async Task BulkInsert(List<AdvertModel> items)
+        public async Task<AdvertModel> GetById(int id)
         {
             _connection.Open();
 
-            var grouped = items.GroupBy(f => f.Title);
-            var fi = grouped.Where(f => f.Count() > 1);
-            var insertItems = grouped.Select(f => f.First()).ToList();
-            string mergeSqlQuery = $"INSERT INTO public.{TableName} (memberid,cityid,cityname,townid,townname,modelid,modelname,year,price,title,date,categoryid,categoryname,km,color,gear,fuel,firstphoto,secondphoto,userinfo,userphone,text) values(@MemberId,@CityId,@CityName,@TownId,@TownName,@ModelId,@ModelName,@Year,@Price,@Title,@Date,@CategoryId,@CategoryName,@KM,@Color,@Gear,@Fuel,@FirstPhoto,@SecondPhoto,@UserInfo,@UserPhone,@Text) ON CONFLICT (Title) DO NOTHING;";
-            await _connection.ExecuteAsync(mergeSqlQuery, insertItems);
+            string queryRaw = $"SELECT {TableName}.*," +
+                $"{TableNames.AdvertCategories}.id as catid,{TableNames.AdvertCategories}.name as catname," +
+                $"{TableNames.Towns}.id as townId,{TableNames.Towns}.name as townName, " +
+                $"{TableNames.VehicleModels}.id as modelId,{TableNames.VehicleModels}.name as modelName " +
+                $" FROM {TableName} " +
+                    $"inner join {TableNames.AdvertCategories} on {TableName}.CategoryId={TableNames.AdvertCategories}.Id " +
+                    $"inner join {TableNames.Towns} on {TableName}.TownId={TableNames.Towns}.Id " +
+                    $"inner join {TableNames.VehicleModels} on {TableName}.ModelId={TableNames.VehicleModels}.Id ";
+
+            queryRaw += $"where {TableName}.id=@id LIMIT 1";
+
+
+            var result = (await _connection.QueryAsync<AdvertModel, CategoryModel, TownModel, Model, AdvertModel>(queryRaw, (advert, category, town, model) =>
+            {
+                advert.SetCategory(category.Id, category.Name);
+                advert.SetTown(category.Id, category.Name);
+                advert.SetModel(category.Id, category.Name);
+                // Diğer eşleştirmeleri yapabilirsiniz
+                return advert;
+            }, splitOn: $"catid, townId, modelId", param: new { Id = id }));
             _connection.Close();
+            return result.FirstOrDefault() ?? throw new Exception("Not found");
         }
+
+
+
     }
 }

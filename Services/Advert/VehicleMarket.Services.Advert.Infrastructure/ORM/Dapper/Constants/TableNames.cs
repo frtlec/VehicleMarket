@@ -8,9 +8,10 @@ namespace VehicleMarket.Services.Advert.Infrastructure.ORM.Dapper.Constants
 {
     public class TableNames
     {
-        public const string Adverts = "adverts";
-        public const string AdvertCategories = "advertCategories";
-        public const string CarModels = "carModels";
+        public const string Advert = "adverts";
+        public const string AdvertCategories = "advertcategories";
+        public const string VehicleModels = "vehiclemodels";
         public const string Towns = "towns";
+        public const string AdvertVitis = "advertvisits";
     }
 }
