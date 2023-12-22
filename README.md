@@ -62,6 +62,9 @@ We can start partying when the Docker containers are up and running.
   [ADVERT API](http://localhost:7100/swagger/index.html)
 
 
+## Notes
+- The initial data and tables of the project come from the init.sql file.
+- init.sql is called in the docker-compose.override.yml file. (look ./docker-compose.override.yml)
 
 ## Using Advert API 
 
