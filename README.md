@@ -58,11 +58,8 @@ Run Docker containers
 We can start partying when the Docker containers are up and running.
 
 - If everything has gone smoothly so far, you should be able to reach the 'advert.api' from the link below
-
-```link
-
-  [ADVERT API]([https://www.google.com](http://localhost:7100/swagger/index.html))
-```
+- ADVERT-API DEFAULT PORT 7100
+  [ADVERT API](http://localhost:7100/swagger/index.html)
 
 
 
