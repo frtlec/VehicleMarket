@@ -61,8 +61,7 @@ We can start partying when the Docker containers are up and running.
 
 ```link
 
-  http://localhost:7100/swagger/index.html
-
+  [ADVERT API]([https://www.google.com](http://localhost:7100/swagger/index.html))
 ```
 
 
