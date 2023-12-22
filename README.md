@@ -16,7 +16,7 @@ This project is developed using .NET 7. It's an electronic vehicle marketplace s
 - FluentValidation
 - DepencyInjection
 - Ngpsql
-- Mediatr
+- MediatR
 - Swagger
 
 ## Architectural
