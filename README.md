@@ -7,7 +7,7 @@ This project is developed using .NET 7. It's an electronic vehicle marketplace s
 
 ## Tech Stack
 
-- .NET7
+- .NET 7
 - Docker & Docker-Compose
 - PosgreSql
 - RabbitMQ
