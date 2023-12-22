@@ -84,8 +84,8 @@ This method, It helps to filter and page all adverts in the system.
 | `EndPrice`| `decimal` | Price range end.|
 | `Gear`| `string` | Gear filter.|
 | `Fuel`| `string` | Fuel filter.|
-| `Take`| `string` | **Required**, Can be used for pagination.| 0 for all |
-| `Skip`| `string` | **If Take is 0 it will not work**, Can be used for pagination.|
+| `Take`| `int` | **Required**, Can be used for pagination.| 0 for all |
+| `Skip`| `int` | **If Take is 0 it will not work**, Can be used for pagination.|
 | `Sort`| `array(sortmodel)` | It can be used for sorting, we can sort by multiple fields|Sort[0].ColumnName=(price-year-km) Sort[0].Directive=(ASC-DESC )|
 
 
