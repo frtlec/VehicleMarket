@@ -42,8 +42,12 @@ namespace VehicleMarket.Services.Advert.Application.Handlers
                 Take = request.Take,
                 BeginPrice = request.BeginPrice,
                 EndPrice = request.EndPrice,
-                Sort = request.Sort
+                Sort=request.Sort
             });
+            if (adverts.Items==null || adverts.Items.Count<1)
+            {
+                return Response<GetAllAdvertsByFilterQueryResult>.Success();
+            }
             GetAllAdvertsByFilterQueryResult advertDto = new GetAllAdvertsByFilterQueryResult()
             {
                 Page = (request.Skip + 1) / request.Take + 1,

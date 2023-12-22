@@ -31,8 +31,10 @@ namespace VehicleMarket.Services.Advert.Application.Handlers
             if (validationResult.IsValid == false)
                 return Response<GetAdvertByIdQueryResult>.Fail(validationResult.Errors.Select(f => f.ErrorMessage).ToList(), HttpStatusCode.BadRequest);
 
-
             AdvertModel result =await _advertRepository.GetById(request.Id);
+            if (result==null)
+                return Response<GetAdvertByIdQueryResult>.Success();
+
 
             GetAdvertByIdQueryResult mapped = _mapper.Map<GetAdvertByIdQueryResult>(result);
             return Response<GetAdvertByIdQueryResult>.Success(mapped);

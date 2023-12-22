@@ -8,6 +8,7 @@ using VehicleMarket.Services.Advert.Application.Dtos;
 using VehicleMarket.Services.Advert.Domain.SeedWork.Dtos;
 using VehicleMarket.Shared.Dtos;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace VehicleMarket.Services.Advert.Application.Queries
 {
@@ -22,6 +23,7 @@ namespace VehicleMarket.Services.Advert.Application.Queries
         public int Take { get; set; }
         public int Skip { get; set; }
 
-        public List<(string ColumnName, SortDirective Directive)>? Sort { get; set; }
+        public List<SortModel>? Sort { get; set; }
+
     }
 }

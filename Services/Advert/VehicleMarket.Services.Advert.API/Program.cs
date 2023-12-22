@@ -9,9 +9,15 @@ using System.Reflection;
 using VehicleMarket.Services.Advert.Application.Helpers.Mappers.AutoMapper;
 using MassTransit;
 using VehicleMarket.Services.Advert.Application.Consumers;
+using Microsoft.AspNetCore.Diagnostics;
+using VehicleMarket.Services.Advert.Application.Helpers.Middlewares;
+using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(f=> {
+    f.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
@@ -46,6 +52,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCustomExceptionMiddleware();
 
 app.UseHttpsRedirection();
 

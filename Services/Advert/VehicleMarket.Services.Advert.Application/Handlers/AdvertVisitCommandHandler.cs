@@ -35,7 +35,7 @@ namespace VehicleMarket.Services.Advert.Application.Handlers
                        IpAddress =remoteIpAddress.ToString(),
                        VisitDate = DateTime.Now,
                    });
-            return Response<NoContent>.Success();
+            return Response<NoContent>.Success(HttpStatusCode.Created);
         }
     }
 }

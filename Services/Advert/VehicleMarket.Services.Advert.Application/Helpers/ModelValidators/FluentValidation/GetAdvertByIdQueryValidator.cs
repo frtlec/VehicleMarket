@@ -12,7 +12,7 @@ namespace VehicleMarket.Services.Advert.Application.Helpers.ModelValidators.Flue
     {
         public GetAdvertByIdQueryValidator()
         {
-            RuleFor(f => f.Id).NotEqual(0).WithMessage("Not equal 0");
+            RuleFor(f => f.Id).NotEqual(0).WithMessage("Take field cannot be 0");
         }
     }
 }

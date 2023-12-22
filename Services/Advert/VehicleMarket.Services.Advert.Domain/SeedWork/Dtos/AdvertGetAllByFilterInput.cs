@@ -16,12 +16,7 @@ namespace VehicleMarket.Services.Advert.Domain.SeedWork.Dtos
         public int? Take { get; set; }
         public int? Skip { get; set; }
 
-        public List<(string ColumnName, SortDirective Directive)> Sort { get; set; }
+        public List<SortModel> Sort { get; set; }
 
-    }
-    public enum SortDirective
-    {
-        ASC,
-        DESC,
     }
 }

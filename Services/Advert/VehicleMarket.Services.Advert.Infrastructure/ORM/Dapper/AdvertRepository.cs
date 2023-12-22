@@ -24,6 +24,7 @@ namespace VehicleMarket.Services.Advert.Infrastructure.ORM.Dapper
         {
             _connection = connection;
         }
+   
         public async Task<(List<AdvertModel> Items, int Total)> GetAllByFilter(AdvertGetAllByFilterInput filter)
         {
             _connection.Open();
@@ -32,10 +33,10 @@ namespace VehicleMarket.Services.Advert.Infrastructure.ORM.Dapper
                     $"{TableNames.AdvertCategories}.id as catid,{TableNames.AdvertCategories}.name, " +
                     $"{TableNames.VehicleModels}.id as modelid,{TableNames.VehicleModels}.name " +
                 $"FROM {TableName}  " +
-                     $"inner join {TableNames.AdvertCategories} on {TableName}.CategoryId={TableNames.AdvertCategories}.Id " +
-                     $"inner join {TableNames.VehicleModels} on {TableName}.ModelId={TableNames.VehicleModels}.Id " +
+                     $"inner join {TableNames.AdvertCategories}  on {TableName}.CategoryId={TableNames.AdvertCategories}.Id " +
+                     $"inner join {TableNames.VehicleModels}  on {TableName}.ModelId={TableNames.VehicleModels}.Id " +
                      $"WHERE 1=1 ";
-            string countQueryRaw = $"SELECT COUNT(id) FROM {TableName} WHERE 1=1 ";
+            string countQueryRaw = $"SELECT COUNT(id) FROM {TableName}  WHERE 1=1 ";
             string condition = string.Empty;
             if (string.IsNullOrEmpty(filter.Gear) == false)
                 condition += "and Gear=@Gear ";
@@ -52,16 +53,16 @@ namespace VehicleMarket.Services.Advert.Infrastructure.ORM.Dapper
             countQueryRaw += condition;
             int countResult = await _connection.QueryFirstAsync<int>(countQueryRaw, new { filter.CategoryId, filter.BeginPrice, filter.EndPrice, filter.Gear, filter.Fuel });
 
-            if (filter.Sort != null)
+            if (filter.Sort != null && filter.Sort.Count>0)
             {
-                queryRaw += "ORDER BY" + string.Join(',', filter.Sort.Select(f => $"{f.ColumnName} {f.Directive}").ToArray());
+                queryRaw += "ORDER BY " + string.Join(',', filter.Sort.Select(f => $"{f.ColumnName} {f.Directive}").ToArray());
             }
             else
             {
                 queryRaw += $"ORDER BY {TableName}.id desc ";
             }
 
-            queryRaw += filter.Take.HasValue == false ? string.Empty : $"OFFSET {filter.Skip} ROWS FETCH NEXT {filter.Take} ROWS ONLY ";
+            queryRaw += filter.Take.HasValue == false ? string.Empty : $" OFFSET {filter.Skip} ROWS FETCH NEXT {filter.Take} ROWS ONLY ";
 
             var adverts = await _connection.QueryAsync<AdvertModel, CategoryModel,Model, AdvertModel>(queryRaw, (advert, category,model) =>
             {
@@ -83,7 +84,7 @@ namespace VehicleMarket.Services.Advert.Infrastructure.ORM.Dapper
                 $"{TableNames.AdvertCategories}.id as catid,{TableNames.AdvertCategories}.name as catname," +
                 $"{TableNames.Towns}.id as townId,{TableNames.Towns}.name as townName, " +
                 $"{TableNames.VehicleModels}.id as modelId,{TableNames.VehicleModels}.name as modelName " +
-                $" FROM {TableName} " +
+                $" FROM {TableName}  " +
                     $"inner join {TableNames.AdvertCategories} on {TableName}.CategoryId={TableNames.AdvertCategories}.Id " +
                     $"inner join {TableNames.Towns} on {TableName}.TownId={TableNames.Towns}.Id " +
                     $"inner join {TableNames.VehicleModels} on {TableName}.ModelId={TableNames.VehicleModels}.Id ";
@@ -100,7 +101,7 @@ namespace VehicleMarket.Services.Advert.Infrastructure.ORM.Dapper
                 return advert;
             }, splitOn: $"catid, townId, modelId", param: new { Id = id }));
             _connection.Close();
-            return result.FirstOrDefault() ?? throw new Exception("Not found");
+            return result.FirstOrDefault();
         }
 
 
