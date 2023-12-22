@@ -23,7 +23,7 @@ This project is developed using .NET 7. It's an electronic vehicle marketplace s
 
 - Domain Driven Design Pattern
 - Microservice
-- Mediatr Design Pattern
+- Mediator Design Pattern
 - CQRS Design Pattern
 - Repository Design Pattern
 
