@@ -115,8 +115,4 @@ content-type:application/json
 | `advertId`      | `int` | **Required**. Advert ID number|
 
 
-#### add(num1, num2)
-
-İki sayı alır ve toplamı döndürür.
-
   
