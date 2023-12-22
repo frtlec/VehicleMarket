@@ -99,7 +99,7 @@ This method advert information in detail
 
 | Parameters | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. The ID field of the item to be called.|
+| `id`      | `int` | **Required**. The ID field of the item to be called.|
 
 #### Record Visit 
 This method saves the advertisements shown by the client application to the user in the database according to the IP address and visit date information.
