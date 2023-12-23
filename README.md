@@ -61,13 +61,14 @@ We can start partying when the Docker containers are up and running.
 <br/>🥳😎😆🥳😎😆🥳😎😆🥳😎😆🥳😎😆🥳😎
 
 
-- If everything has gone smoothly so far, you should be able to reach the 'advert.api' from the link below
+
 
 
 
 ## Connect
+- If everything has gone smoothly so far, you should be able to reach the 'advert.api' from the link below
   - [Advert Api (:7100)](http://localhost:7100/swagger/index.html)
-  - [Rabbitmq (:15673)](http://localhost:15673/) guest:guest
+  - [RabbitMQ (:15673)](http://localhost:15673/) guest:guest
 
 
 ## Connect Postgre SQL
