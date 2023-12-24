@@ -24,7 +24,6 @@ namespace VehicleMarket.Services.Advert.Application.Helpers.Middlewares
             catch (Exception ex)
             {
                 string requestID = context.TraceIdentifier;
-                //Logging can be done here.
                 Console.WriteLine($"Exception: {ex}");
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 context.Response.ContentType = "text/plain";
